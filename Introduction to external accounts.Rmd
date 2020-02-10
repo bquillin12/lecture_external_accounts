@@ -1,0 +1,113 @@
+---
+title: "Introduction to Macroeconomic Analysis Through Financial Programming"
+subtitle: "Focus on External Accounts"
+author: "Bryce Quillin"
+date: "February 10, 2020"
+output:
+  ioslides_presentation: default
+  beamer_presentation: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+##  General framework
+* Real economy (output, price level, exchange rates)
+* Government sector (fiscal revenues and expenditures)
+* Monetary and financial sector 
+* External sector (BoP and IIP)
+
+** Modeling requires these four sectors to be consistent with one another
+
+## External sector
+* Free trade a rare area of consensus among economists
+* International trade allows global production to be organized more efficiently: international division of labor
+* Breaks the identity that domestic consumption and investment = domestic production
+* Spending in excess of domestic production can be financed by accumulating external liabilities
+* Excess of production over spending results in accumulation of external wealth
+
+## Balance of payments - some basics
+* Records transactions of goods, services, and assets between residents and foreign residents in two separate accounts:
+    + Current account
+    + Capital and financial account
+* Transactions recorded in a major international currency, normally USD
+* Complied on accrual accounting basis
+* Constructed with double entry accounting system: + is a credit and - a debit.
+
+## BOP - Current account
+* Goods - Trade balance = exports - imports of goods
+* Services
+    + Transporation/travel
+    + Government services
+    +Other services
+* Income
+    + Compensation of employees
+    + Investment income
+* Current transfers
+
+__The CA balance is often short hand for a country's external position__
+
+## BOP Capital account
+  * Capital account: 
+    + Capital transfers 
+    + Acquisition/disposal of non-produced, nonfinancial assets
+
+* Financial account 
+    + Direct investment (FDI), net
+    + Portfolio investment, net
+    + Other investments, net
+    + Loans, trade credits
+    + Reserve assets - finance imbalances elsewhere in BOP (important to understand)
+    
+## Determinants of CAB: savings and investment - absorption approach
+* CAB = Gross national disposable income (GNDI) - Absorption (A)
+* CA deficit occurs when  a country spends beyond its means or absorbs more than it produces
+* Thus, reducing CA deficit requires an increase in income and/or reduction in absorption
+* Increasing output (and hence income): in short-term: requires unused capacity; medium-term: increased production capacity through investment, labor force participation, and structural policies
+* Reducing absorption achieved by contracting final comsumption or investment
+
+## Determinants of CAB: savings and investment - SI approach
+* Savings-investment balance approach
+    + CAB = Savings - Investment
+* In this view, CAB reflects country's use of foreign savings
+* Excess of investment over savings must be covered by foreign saving
+* CA deficit thus reduced by increasing savings and/or reducing investment
+
+## Determiants of CAB: capital flows and reserves
+* The CAB identities imply:
+    + CAB + Net Capital Inflow (FI) - Change in Reserves (delta RES) = 0
+* CA deficit can be maintained only as long as capital inflows persist and/or net official international reserves decline
+* Large and persistent CA deficits and increasing net international indebtedness raise questions over sustainability
+
+# 
+```{r message = F, warning = F}
+library(ggplot2)
+library(reshape2)
+
+bop <- read.csv("bop.csv", sep = ",", header = T)
+
+bop <- melt(bop, id = c("year"))
+
+ggplot(bop) + geom_line(aes(x = year, y = value, color = variable)) +
+  labs(title = "Current Account Balance (% GDP)", caption = "Source: International Monetary Fund.") +
+  xlab("") + ylab("") +
+  theme(plot.title = element_text(hjust = 0.5), plot.caption = element_text(hjust = 0.0),
+        legend.title = element_blank())
+
+```
+
+
+# 
+![china](IMG_0076.jpg)
+
+#
+![russia](russia.png)
+
+
+
+
+
+
+
+
