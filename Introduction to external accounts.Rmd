@@ -1,0 +1,317 @@
+---
+title: "Introduction to Macroeconomic Analysis Through Financial Programming"
+author: "Bryce Quillin"
+date: "https://github.com/bquillin12/lecture_external_accounts.git"
+output:
+  beamer_presentation: default
+  slidy_presentation: default
+  ioslides_presentation: default
+subtitle: Focus on External and Fiscal Accounts
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+##  General framework
+* Real economy (output, price level, exchange rates)
+* _Government sector (fiscal revenues and expenditures)_
+* Monetary and financial sector 
+* _External sector (BoP and IIP)_
+
+__Modeling requires these four sectors to be consistent with one another__
+
+## A case study: Thailand in 1997
+
+```{r gdp, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
+
+library(reshape2)
+library(ggplot2)
+thailand_gdp <- read.csv("thailand_gdp.csv", sep = ",", header = T, fileEncoding="UTF-8-BOM")
+thailand_gdp <- melt(thailand_gdp, id.vars = "Year")
+ggplot(thailand_gdp) +
+ aes(x = Year, y = value, fill = variable, colour = variable) +
+ geom_line(size = 1.3) +
+ scale_fill_hue() +
+ scale_color_hue() +
+ labs(title = "GDP Growth (y/y, %), 1990-98", caption = "Source: International Monetary Fund") +
+ theme_minimal() + theme(plot.title = element_text(hjust = 0.5), plot.caption = element_text(hjust = 0.0),
+        legend.title = element_blank()) + xlab("") + ylab("")
+```
+
+## The fiscal deficit deteriorated
+
+```{r structural_balance, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
+
+library(ggplot2)
+structural_balance <- read.csv("structural_balance.csv", sep = ",", header = T, fileEncoding="UTF-8-BOM")
+ggplot(structural_balance) +
+  aes(x = year, y = balance, color = "red") +
+  geom_line(size = 1.3) +
+  scale_fill_hue() +
+ scale_color_hue() +
+ labs(title = "Thailand: Structural Fiscal Balance (% Potential GDP), 1995-98", caption = "Source: International Monetary Fund") +
+  theme_minimal() + theme(plot.title = element_text(hjust = 0.5), plot.caption = element_text(hjust = 0.0)) +
+  theme(legend.position = "none") +
+  xlab("") + ylab("")
+  
+```
+
+## The current account improved as demand collapsed
+
+```{r cab, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
+
+library(ggplot2)
+cab <- read.csv("cab.csv", sep = ",", header = T, fileEncoding="UTF-8-BOM")
+ggplot(cab) +
+  aes(x = year, y = balance, color = "red") +
+  geom_line(size = 1.3) +
+  scale_fill_hue() +
+ scale_color_hue() +
+ labs(title = "Thailand: Current Account Balance (% GDP), 1990-98", caption = "Source: International Monetary Fund") +
+  theme_minimal() + theme(plot.title = element_text(hjust = 0.5), plot.caption = element_text(hjust = 0.0)) +
+  theme(legend.position = "none") +
+  xlab("") + ylab("") +
+  scale_x_continuous(name = " ", breaks = c(1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998))
+  
+```
+
+## Reserves disappeared fast
+
+```{r reserves, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
+
+year <- c(1995, 1996, 1997, 1998, 1999)
+reserves_amount <- c(36.9, 38.6, 27.0, 29.5, 34.8)
+reserves_amount_df <- data.frame(year, reserves_amount)
+
+library(ggplot2)
+ggplot(reserves_amount_df) +
+   aes(x = year, y = reserves_amount, color = "red") +
+  geom_line(size = 1.3) +
+  scale_fill_hue() +
+ scale_color_hue() +
+ labs(title = "Thailand: Total Reserves (incl. gold, current USD), 1995-99", caption = "Source: International Monetary Fund") +
+  theme_minimal() + theme(plot.title = element_text(hjust = 0.5), plot.caption = element_text(hjust = 0.0)) +
+  theme(legend.position = "none") +
+  xlab("") + ylab("")
+```
+
+## External debt stocks exploded
+
+```{r external_debt, echo = F, message = F, warning = F}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
+
+year <- c(1995, 1996, 1997, 1998, 1999)
+ext_debt <- c(60.2, 63.3, 75.3, 96.0, 78.9)
+external_debt <- data.frame(year, ext_debt)
+
+library(ggplot2)
+ggplot(external_debt, aes(x = year, y = ext_debt)) + geom_bar(stat = "identity", color = "red", fill = "red") +
+  labs(title = "Thailand: External debt (% GDP), 1995-99", caption = "Source: World Bank.") +
+  theme_minimal() + theme(plot.title = element_text(hjust = 0.5), plot.caption = element_text(hjust = 0.0)) +
+  xlab("") + ylab("")
+  
+  
+
+```
+
+## Large stocks of debt were on short maturities
+
+```{r st_debt, echo = F, message = F, warning = F}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
+
+year <- c(1995, 1996, 1997, 1998, 1999)
+st_debt <- c(119, 123, 140, 100, 67)
+st_debt_df <- data.frame(year, st_debt)
+
+library(ggplot2)
+ggplot(st_debt_df, aes(x = year, y = st_debt)) + geom_bar(stat = "identity", color = "red", fill = "red") +
+  labs(title = "Thailand: Short-Term Debt (% total reserves), 1995-99", subtitle = "Claims between 1-2 years", caption = "Source: World Bank.") +
+  theme_minimal() + theme(plot.title = element_text(hjust = 0.5), plot.caption = element_text(hjust = 0.0)) +
+  xlab("") + ylab("")
+
+```
+
+
+## External sector
+* Free trade a rare area of consensus among economists
+* International trade allows global production to be organized more efficiently: international division of labor
+* Breaks the identity that domestic consumption and investment = domestic production
+* Spending in excess of domestic production can be financed by accumulating external liabilities
+* Excess of production over spending results in accumulation of external wealth
+
+## External sector and international political economy
+* External imbalance tell you a lot about a country
+  + Its stage of development
+  + The adquacy of its policies (macroeconomic as well as structural)
+  + A major source of economic and financial crises, perhaps with politic origins ans always with political consequences
+* Cross-national external imbalances a source of international conflict
+  + Debates about excessive surpluses or deficits
+  + Long standing debate on "who adjusts?"
+* Involves the contribution of international institutions (e.g., IMF)
+
+## Balance of payments - some basics
+* Records transactions of goods, services, and assets between residents and foreign residents in two separate accounts:
+    + Current account
+    + Capital and financial account
+* Transactions recorded in a major international currency, normally USD
+* Complied on accrual accounting basis
+* Constructed with double entry accounting system: + is a credit and - a debit.
+
+## BOP - Current account
+* Goods - Trade balance = exports - imports of goods
+* Services
+    + Transporation/travel
+    + Government services
+    +Other services
+* Income
+    + Compensation of employees
+    + Investment income
+* Current transfers
+
+__The CA balance is often short hand for a country's external position__
+
+## BOP Capital account
+  * Capital account: 
+    + Capital transfers 
+    + Acquisition/disposal of non-produced, nonfinancial assets
+
+* Financial account 
+    + Direct investment (FDI), net
+    + Portfolio investment, net
+    + Other investments, net
+    + Loans, trade credits
+    + Reserve assets - finance imbalances elsewhere in BOP (important to understand)
+    
+## Determinants of CAB: savings and investment - absorption approach
+* CAB = Gross national disposable income (GNDI) - Absorption (A)
+* CA deficit occurs when  a country spends beyond its means or absorbs more than it produces
+* Thus, reducing CA deficit requires an increase in income and/or reduction in absorption
+* Increasing output (and hence income): 
+    + Short-term: requires unused capacity
+    + Medium-term: increased production capacity through investment, labor force participation, and structural policies
+* Reducing absorption achieved by contracting final consumption or investment
+
+## Determinants of CAB: savings and investment - SI approach
+* Savings-investment balance approach
+    + CAB = Savings - Investment
+* In this view, CAB reflects country's use of foreign savings
+* Excess of investment over savings must be covered by foreign saving
+* CA deficit thus reduced by increasing savings and/or reducing investment
+
+## Determiants of CAB: capital flows and reserves
+* The CAB identities imply:
+    + CAB + Net Capital Inflow (FI) - Change in Reserves (delta RES) = 0
+* CA deficit can be maintained only as long as capital inflows persist and/or net official international reserves decline
+* Large and persistent CA deficits and increasing net international indebtedness raise questions over sustainability
+
+## Are current account deficits or surpluses bad? (1)
+* In principle, deficits and surpluses are normal and may be related to stages of development
+
+* Lower income countries might run CA deficits as part of economic development: there are profitable domestic investment opportunities but insufficient finance (capital should flow "downhill")
+
+* CA deficits may be optimal response to temporary negative shock
+
+* Aging economies may run CA surpluses as foreign assets are accumulated to fund retirement consumption
+
+* CA surpluses may reflect attempt to "insure" against financial crises or cyclical downturns in commodities prices
+
+## Are current account deficits or surpluses bad? (2)
+
+* On the other hand, CA surpluses or deficits may reflect broader
+problems in macroeconomic or structural policies
+
+* For example, excessive domestic demand pressures may result from
+loose fiscal policy, translating into higher imports with no
+corresponding increase in exports
+
+* Or expectations for excessively tight monetary policy or weak labor
+markets may encourage high household savings rates and surpress
+demand for imported goods
+
+## Indicators of external vulnerability
+
+* In countries without or limited capital markets access, CA deficits are
+financed through changes in gross foreign reserves. A risk indicator
+for these countries is the
+stock of international reserves to monthly
+import bill.
+The standard is normally that three months is sufficient
+
+* For those with capital markets access, CA deficits can be financed
+through foreign borrowing, portfolio inflows, or FDI. The composition
+of financing matters, some specific metrics include:
+
++ Ratio of short term debt to reserves
++ Exchange rate behavior
++ Interest rate spreads against a benchmark, such as U.S. government bonds
++ Is country vulnerable to financing disruptions
+
+## Current account and the real exchange rate
+* CA position closely linked to the level of the real exchange rate ( =
+price of domestic consumption basket vs. foreign consumption
+basket)
+
+*  A real exchange rate appreciation occurs when domestically produced
+goods become more expensive than goods produced abroad
+
+* As labor is the largest component in most sectors, labor costs are a
+big determinant of domestic inflation and unit labor costs are another
+basis to measure the real exchange rate
+
+* Normally a real exchange rate appreciation will lead to a deterioration
+in the CA
+
+## Now let's look at another case study, Turkey, where growth has slowed..
+
+```{r turkey, echo = F, message = F, warning = F}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
+
+year <- c(2017, 2018, 2019, 2020, 2021)
+
+turkey_gdp_growth <- c(7.5, 2.8, 0.2, 3.0, 3.0)
+turkey_cab <- c(-5.6, -3.5, -0.1, -0.6, -1.3)
+turkey_structural <- c(-1.6, -2.5, -2.9, -1.9, -1.8)
+turkey_external_debt <- c(53.4, 57.6, 61.3, 55.7, 50.7)
+
+turkey_gdp_df <- data.frame(year, turkey_gdp_growth)
+turkey_cab_df <- data.frame(year, turkey_cab)
+turkey_structural_df <- data.frame(year, turkey_structural)
+turkey_external_debt_df <- data.frame(year, turkey_external_debt)
+
+library(ggplot2)
+library(ggpubr)
+
+turkey_gdp_plot <- ggplot(turkey_gdp_df, aes(x = year, y = turkey_gdp_growth)) + geom_line(color = "red") +
+  labs(title = "GDP Growth (y/y, %)") +  theme_minimal() + theme(plot.title = element_text(hjust = 0.5), plot.caption = element_text(hjust = 0.0)) + xlab("") + ylab("") 
+
+turkey_cab_plot <- ggplot(turkey_cab_df, aes(x = year, y = turkey_cab)) + geom_line(color = "red") +
+  labs(title = "Current Account Balance (% GDP)") +  theme_minimal() + theme(plot.title = element_text(hjust = 0.5), plot.caption = element_text(hjust = 0.0)) + xlab("") + ylab("") 
+
+turkey_structural_plot <- ggplot(turkey_structural_df, aes(x = year, y = turkey_structural)) + geom_line(color = "red") + labs(title = "Structural Primary Balance (% potential output)", caption = "Source: International Monetary Fund.") +  
+  theme_minimal() + theme(plot.title = element_text(hjust = 0.5), plot.caption = element_text(hjust = 0.0)) + xlab("") + ylab("") 
+
+turkey_debt_plot <- ggplot(turkey_external_debt_df, aes(x = year, y = turkey_external_debt)) + geom_line(color = "red") + labs(title = "Gross External Debt (% GDP)") +  theme_minimal() + theme(plot.title = element_text(hjust = 0.5), plot.caption = element_text(hjust = 0.0)) + xlab("") + ylab("") 
+
+ggarrange(turkey_gdp_plot, turkey_cab_plot, turkey_structural_plot, turkey_debt_plot, ncol = 2, nrow = 2)
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
